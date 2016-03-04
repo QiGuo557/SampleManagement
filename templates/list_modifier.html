@@ -5,21 +5,23 @@
     <title>List modifier</title>
 </head>
 <body>
-    <form action="list_modifier.html">
+    <form action="/update-list" method="post">
+        {% csrf_token %}
         <div>
             <label for="name">Name:</label>
-            <input type="text" id="name"/>
+            <input type="text" id="name" name="name"/>
         </div>
         <div>
             <label for="chemical">Chemical:</label>
-            <input type="text" id="chemical"/>
+            <input type="text" id="chemical" name="chemical"/>
         </div>
         <div>
             <label for="notes">Notes:</label>
-            <textarea id="notes"></textarea>
+
+            <textarea id="notes" name="notes"></textarea>
         </div>
         <div class="button">
-            <button type="submit">Submit</button>
+            <input type="submit" id="submit_button">
             <button type="reset">Cancel</button>
         </div>
     </form>
@@ -29,7 +31,7 @@
     label{
         font-weight: bold;
     }
-    button{
+    #submit_button, button{
          border-radius: 4px;
          border: none;
          color: white;
@@ -40,7 +42,7 @@
          font-size: 10px;
          margin-top: 10px;
     }
-    button:first-child{
+    #submit_button{
         background-color: #4CAF50;
     }
     button:last-child{

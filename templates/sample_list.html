@@ -16,7 +16,7 @@
         </tr>
         {%  for item in data.sample_data %}
             <tr>
-                <td>{{ item.name }}</td>
+                <td><a onclick="editForm()"">{{ item.name }}</a></td>
                 <td>{{ item.chemical }}</td>
                 <td>{{ item.notes }}</td>
             </tr>
@@ -25,12 +25,20 @@
 
 
     </table>
-{#    <div class="button">#}
-{#        <button type="submit">New Sample</button>#}
-{#    </div>#}
-    <button type="button">New Sample</button>
+
+    <form action="/save-list/" method="get">
+        <input type="submit"/>
+{#        <input type="hidden" name = "name">#}
+    </form>
 </body>
 </html>
+
+<script>
+    function editForm(){
+        //TODO set sample data to form field
+    }
+
+</script>
 <style>
 
     table{
