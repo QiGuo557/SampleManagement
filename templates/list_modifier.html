@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List modifier</title>
+</head>
+<body>
+    <form action="list_modifier.html">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name"/>
+        </div>
+        <div>
+            <label for="chemical">Chemical:</label>
+            <input type="text" id="chemical"/>
+        </div>
+        <div>
+            <label for="notes">Notes:</label>
+            <textarea id="notes"></textarea>
+        </div>
+        <div class="button">
+            <button type="submit">Submit</button>
+            <button type="reset">Cancel</button>
+        </div>
+    </form>
+</body>
+</html>
+<style>
+    label{
+        font-weight: bold;
+    }
+    button{
+         border-radius: 4px;
+         border: none;
+         color: white;
+         padding: 6px 10px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 10px;
+         margin-top: 10px;
+    }
+    button:first-child{
+        background-color: #4CAF50;
+    }
+    button:last-child{
+        background-color: #e60000;
+    }
+</style>
