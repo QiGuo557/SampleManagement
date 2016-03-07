@@ -17,9 +17,9 @@ Database
 - SQLite 3
 - Sample Table Structure:
 
-
-    |----------|:-------------:|------:|
-    | ID|  INTEGER | PRIMARY KEY |
-    | Name|    CHAR(50)   |   NOT NULL, |
-    | Chemical| CHAR(50) |    NOT NULL, |
-    | Notes| CHAR(100) |     |
+    | Column   |      Type     |   Others  |
+    |----------|:-------------:|----------:|
+    | ID       |INTEGER        |PRIMARY KEY|
+    | Name     |CHAR(50)       |NOT NULL,  |
+    | Chemical |CHAR(50)       |NOT NULL,  |
+    | Notes    |CHAR(100)      |           |
