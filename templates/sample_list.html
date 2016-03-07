@@ -1,80 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
     <meta charset="UTF-8">
     <title>Sample lists</title>
 </head>
 <body>
 
-{#    <table border=1 frame=void rules==rows>#}
-    <table>
+    <table class="sample-table">
 
         <tr>
             <th>Sample Name</th>
             <th>Sample Chemical</th>
             <th>Sample Notes</th>
         </tr>
-        {%  for item in data.sample_data %}
+        {%  for item in data %}
             <tr>
-                <td><a onclick="editForm()"">{{ item.name }}</a></td>
+                <td><a class="edit-link" onclick="editForm({{ item.id }})"
+                       onmouseover="this.style.textDecoration='underline'"
+                       onmouseout="this.style.textDecoration='none'">{{ item.name }}</a></td>
                 <td>{{ item.chemical }}</td>
                 <td>{{ item.notes }}</td>
             </tr>
+            <form id="{{ item.id }}" action="/list-modifier/" method="post">
+                {% csrf_token %}
+                <input type="hidden" value="{{ item.id }}" name="id"/>
+                <input type="hidden" value="{{ item.name }}" name="name"/>
+                <input type="hidden" value="{{ item.chemical }}" name="chemical"/>
+                <input type="hidden" value="{{ item.notes }}" name="notes"/>
+            </form>
         {%  endfor %}
+  </table>
 
-
-
-    </table>
-
-    <form action="/save-list/" method="get">
-        <input type="submit"/>
-{#        <input type="hidden" name = "name">#}
+    <form action="/list-modifier/" method="get">
+        <input class = "new-sample-button" type="submit" value="New Sample"/>
     </form>
+
 </body>
 </html>
 
 <script>
-    function editForm(){
-        //TODO set sample data to form field
+    function editForm(id){
+        document.getElementById(id).submit();
     }
-
 </script>
-<style>
-
-    table{
-        border-collapse: collapse;
-        width:100%;
-    }
-    th{
-        text-align: left;
-    }
-    tr{
-        border: solid;
-        border-color: darkgrey;
-        border-width: 1px 0;
-    }
-    tr:first-child{
-        border-top: none;
-    }
-    tr:last-child{
-        border-bottom: none;
-    }
-    button{
-        border-radius: 4px;
-        border:none;
-        color:white;
-        padding: 6px 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 10px;
-        background-color: #4CAF50;
-        margin-top: 10px;
-    }
-</style>
-
-{#<style>#}
-{#    table {#}
-{#       border: 1px solid black;#}
-{#    }#}
-{#</style>#}

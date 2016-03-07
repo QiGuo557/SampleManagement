@@ -1,38 +1,59 @@
-from django.http import HttpResponse
-from django.shortcuts import render, render_to_response
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils.safestring import mark_safe
-import json
-from django.core import serializers
-from sample_form import SampleForm
+
+from SampleManagement.sample import Sample
+
 
 def sample_list_handler(request):
-    # TODO read from DB
-    data1 = {}
-    data1[u'name'] = u'test name1'
-    data1[u'chemical'] = u'test c1'
-    data1[u'notes'] = u'test note1'
+    """Transmit sample data to the frontend"""
+    from SampleManagement.db.sample_db import search_all_sample
+    samples = search_all_sample()
+    return render_to_response(r'sample_list.html', {'data': samples}, context_instance=RequestContext(request))
 
-    data2 = {}
-    data2[u'name'] = u'test name2'
-    data2[u'chemical'] = u'test c2'
-    data2[u'notes'] = u'test note2'
 
-    data = {'sample_data':[data1, data2]}
-    return render_to_response(r'sample_list.html', {'data':data},  context_instance=RequestContext(request))
+def insert_list_handler(request):
+    """ Get sample data to be inserted and insert them into the database"""
+    from SampleManagement.db.sample_db import insert_sample
+    name = request.POST['name']
+    chemical = request.POST['chemical']
+    notes = request.POST['notes']
 
-def open_save_list_handler(request):
-    return render_to_response(r'list_modifier.html', None ,context_instance=RequestContext(request))
+    new_sample = Sample(name=name, chemical=chemical, notes=notes)
 
-def open_sample_list_handler(request):
-    print request.POST['name']
-    print request.POST['chemical']
-    print request.POST['notes']
+    insert_sample(new_sample)
+    return HttpResponseRedirect('/sample-list/')
 
-    # TODO Save to DB
-    # TODO Call sample_list_handler
-    # return render_to_response(r'sample_list.html', None ,context_instance=RequestContext(request))
 
-def edit_sample_handler(request):
-    # TODO
-    pass
+def open_list_modifier_handler(request):
+    """Transmit sample data to the frontend"""
+    is_edit = False
+    passed_data = {}
+    if request.POST:
+        is_edit = True
+        id = request.POST['id']
+        name = request.POST['name']
+        chemical = request.POST['chemical']
+        notes = request.POST['notes']
+        save_sample = {'id': id, 'name': name, 'chemical': chemical, 'notes': notes}
+        passed_data = {'data': save_sample}
+    passed_data['is_edit'] = is_edit
+    return render_to_response(r'list_modifier.html', passed_data, context_instance=RequestContext(request))
+
+
+def edit_list_handler(request):
+    """ Get sample data to be edited and edit them in the database"""
+    from SampleManagement.db.sample_db import edit_sample
+    id = request.POST['id']
+    name = request.POST['name']
+    chemical = request.POST['chemical']
+    notes = request.POST['notes']
+
+    sample = Sample(id=id, name=name, chemical=chemical, notes=notes)
+    edit_sample(sample)
+    return HttpResponseRedirect('/sample-list/')
+
+
+def cancel_handler(request):
+    """ When the cancel button was pressed, redirect to sample_list template"""
+    return HttpResponseRedirect('/sample-list/')

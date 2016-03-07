@@ -1,51 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
     <meta charset="UTF-8">
     <title>List modifier</title>
 </head>
 <body>
-    <form action="/update-list" method="post">
+    {% if is_edit %}
+        <form id="submit-form" action="/edit-list/" method="post">
         {% csrf_token %}
-        <div>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name"/>
-        </div>
-        <div>
-            <label for="chemical">Chemical:</label>
-            <input type="text" id="chemical" name="chemical"/>
-        </div>
-        <div>
-            <label for="notes">Notes:</label>
+    {% else %}
+        <form id="submit-form" action="/insert-list/" method="post">
+        {% csrf_token %}
+    {% endif %}
+    <table>
+        <tr>
+            <td><label for="name">Name:<span class="red">*</span></label></td>
+            <td><input type="text" id="name" name="name" value="{{ data.name }}"/></td>
+            <td><span style="visibility: hidden" id='name-error' class="error-message red">Please input name</span></td>
+        </tr>
 
-            <textarea id="notes" name="notes"></textarea>
-        </div>
-        <div class="button">
-            <input type="submit" id="submit_button">
-            <button type="reset">Cancel</button>
-        </div>
+        <tr>
+            <td><label for="chemical">Chemical:<span class="red">*</span></label></td>
+            <td><input type="text" id="chemical" name="chemical" value="{{ data.chemical }}"/></td>
+            <td><span style="visibility: hidden" id='chemical-error' class="error-message red">
+                Please input chemical</span></td>
+        </tr>
+
+        <tr>
+            <td><label for="notes">Notes:</label></td>
+            <td><textarea rows="10" cols="20" id="notes" name="notes">{{ data.notes }}</textarea></td>
+        </tr>
+    </table>
+    <div>
+        <button type="button" onclick="submitSample()">Submit</button>
+
+        <button type="button" onclick="cancel()">Cancel</button>
+    </div>
+
+    <input type="hidden" name="id" value="{{ data.id }}">
+
+
     </form>
+
+    <form id='cancel' action="/cancel/"/>
+
 </body>
 </html>
-<style>
-    label{
-        font-weight: bold;
+
+<script>
+    function submitSample(){
+        var nameInput = document.getElementById('name').value
+        var chemicalInput = document.getElementById('chemical').value
+        var is_valid = true
+        if(nameInput == null || nameInput == ''){
+            document.getElementById('name-error').style.visibility = 'visible'
+            is_valid = false
+        }else {
+            document.getElementById('name-error').style.visibility = 'hidden'
+        }
+        if(chemicalInput == null || chemicalInput == ''){
+            document.getElementById('chemical-error').style.visibility = 'visible'
+            is_valid = false
+        }else {
+            document.getElementById('chemical-error').style.visibility = 'hidden'
+        }
+        if(is_valid){
+            document.getElementById('submit-form').submit()
+        }
     }
-    #submit_button, button{
-         border-radius: 4px;
-         border: none;
-         color: white;
-         padding: 6px 10px;
-         text-align: center;
-         text-decoration: none;
-         display: inline-block;
-         font-size: 10px;
-         margin-top: 10px;
+    function cancel(){
+        document.getElementById('cancel').submit()
     }
-    #submit_button{
-        background-color: #4CAF50;
-    }
-    button:last-child{
-        background-color: #e60000;
-    }
-</style>
+</script>
