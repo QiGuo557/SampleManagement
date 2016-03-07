@@ -18,19 +18,30 @@
         <tr>
             <td><label for="name">Name:<span class="red">*</span></label></td>
             <td><input type="text" id="name" name="name" value="{{ data.name }}"/></td>
-            <td><span style="visibility: hidden" id='name-error' class="error-message red">Please input name</span></td>
+            <td>
+                <span style="display: none" id='name-empty-error' class="error-message red">Please input name</span>
+                <span style="display: none" id='name-length-error' class="error-message red">Name should be less than 50 characters</span>
+            </td>
         </tr>
 
         <tr>
             <td><label for="chemical">Chemical:<span class="red">*</span></label></td>
             <td><input type="text" id="chemical" name="chemical" value="{{ data.chemical }}"/></td>
-            <td><span style="visibility: hidden" id='chemical-error' class="error-message red">
-                Please input chemical</span></td>
+            <td>
+                <span style="display: none" id='chemical-empty-error' class="error-message red">
+                Please input chemical</span>
+                <span style="display: none" id='chemical-length-error' class="error-message red">
+                Chemical should be less than 50 characters</span>
+            </td>
         </tr>
 
         <tr>
             <td><label for="notes">Notes:</label></td>
-            <td><textarea rows="10" cols="20" id="notes" name="notes">{{ data.notes }}</textarea></td>
+            <td><textarea rows="10" cols="20" id="notes" name="notes" id="notes">{{ data.notes }}</textarea></td>
+            <td>
+                <span style="display: none" id='notes-length-error' class="error-message red">
+               Notes should be less than 100 characters</span>
+            </td>
         </tr>
     </table>
     <div>
@@ -53,18 +64,44 @@
     function submitSample(){
         var nameInput = document.getElementById('name').value
         var chemicalInput = document.getElementById('chemical').value
+        var notesInput = document.getElementById('notes').value
         var is_valid = true
+        //name validation
         if(nameInput == null || nameInput == ''){
-            document.getElementById('name-error').style.visibility = 'visible'
+            document.getElementById('name-empty-error').style.display = ""
+            document.getElementById('name-length-error').style.display = "none"
             is_valid = false
         }else {
-            document.getElementById('name-error').style.visibility = 'hidden'
+             if(nameInput.length > 50){
+                document.getElementById('name-length-error').style.display = ""
+                is_valid = false
+            }else{
+                document.getElementById('name-length-error').style.display = "none"
+            }
+            document.getElementById('name-empty-error').style.display = "none"
         }
+
+         //chemical validation
         if(chemicalInput == null || chemicalInput == ''){
-            document.getElementById('chemical-error').style.visibility = 'visible'
+            document.getElementById('chemical-empty-error').style.display = ""
+            document.getElementById('chemical-length-error').style.display = "none"
             is_valid = false
         }else {
-            document.getElementById('chemical-error').style.visibility = 'hidden'
+            if(chemicalInput.length > 50){
+                document.getElementById('chemical-length-error').style.display = ""
+                is_valid = false
+            }else{
+                document.getElementById('chemical-length-error').style.display = "none"
+            }
+            document.getElementById('chemical-empty-error').style.display = "none"
+        }
+
+        //notes validation
+        if(notesInput.length > 100){
+            document.getElementById('notes-length-error').style.display = ""
+            is_valid = false
+        }else{
+            document.getElementById('notes-length-error').style.display = "none"
         }
         if(is_valid){
             document.getElementById('submit-form').submit()
